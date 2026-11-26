@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#121311">
-  <meta name="description" content="Portfólio do Ryan. Segurança cibernética ofensiva, redes de computadores, projetos e loja no Discord.">
+  <meta name="description" content="Portfólio do Ryan. Conheça o Nova, bot com IA para lojas no Discord, e outros projetos.">
   <title>Ryan · Portfólio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -172,6 +172,43 @@
     .project p { margin-top: 7px; color: var(--quiet); font-size: .95rem; }
     .project-arrow { color: var(--accent); padding: 6px; }
 
+    .nova-project {
+      margin-bottom: 24px;
+      padding: clamp(18px, 3vw, 32px);
+      border: 1px solid #493955;
+      border-radius: 12px;
+      background: radial-gradient(ellipse at top left, #26202d, #191819 72%);
+      scroll-margin-top: 24px;
+    }
+
+    .nova-header {
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 2vw, 22px);
+    }
+
+    .nova-logo {
+      flex: none;
+      display: block;
+      width: clamp(58px, 9vw, 92px);
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .nova-project h3 { font-size: clamp(2.6rem, 4.8vw, 4.25rem); }
+    .nova-header p { margin-top: 5px; color: var(--quiet); }
+    .nova-features {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 24px;
+      margin: 22px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid #3d3444;
+    }
+
+    .nova-features dt { color: #e3c9f5; font-weight: 600; }
+    .nova-features dd { margin: 4px 0 0; color: var(--quiet); font-size: .95rem; }
+
     .about { border-top: 1px solid var(--edge); }
     .about-inner {
       display: grid;
@@ -226,6 +263,10 @@
       .project-symbol { width: 39px; }
     }
 
+    @media (max-width: 520px) {
+      .nova-features { grid-template-columns: 1fr; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; }
@@ -253,7 +294,7 @@
     <section class="wrap hero" aria-labelledby="titulo">
       <div class="handle mono">@RyanNXZ9</div>
       <h1 id="titulo">Oi, eu sou<br><em>o Ryan.</em></h1>
-      <p>Crio ferramentas de software. Aqui estão os projetos que já publiquei, com links para o código de cada um.</p>
+      <p>Desenvolvo bots e ferramentas para plataformas como Discord e Steam.</p>
       <div class="hero-actions">
         <a class="button primary mono" href="#projetos">Ver projetos <span aria-hidden="true">↓</span></a>
         <a class="button mono hero-discord" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">Discord <span aria-hidden="true">↗</span></a>
@@ -276,25 +317,54 @@
           </p>
         </div>
 
-        <div class="project-list">
-          <a class="project" href="https://github.com/RyanNXZ9/AuraTool" target="_blank" rel="noreferrer">
-            <span class="project-symbol" aria-hidden="true">A_</span>
-            <div>
-              <h3>AuraTool</h3>
-              <p>Ferramenta para personalizar a aparência do perfil do Discord com Vencord.</p>
-            </div>
-            <span class="project-arrow" aria-hidden="true">↗</span>
-          </a>
+        <div>
+          <article class="nova-project" id="nova" aria-labelledby="nova-titulo">
+            <header class="nova-header">
+              <img class="nova-logo" src="assets/nova.png" width="321" height="364" alt="" loading="lazy">
+              <div>
+                <h3 id="nova-titulo">Nova</h3>
+                <p>Bot com IA que criei para administrar lojas no Discord.</p>
+              </div>
+            </header>
+            <dl class="nova-features">
+              <div>
+                <dt>Vendas e entrega</dt>
+                <dd>Gera chaves, oferece amostras e permite integrar entrega manual e gateways de pagamento.</dd>
+              </div>
+              <div>
+                <dt>Atendimento e moderação</dt>
+                <dd>Modera canais, verifica usuários e responde aos clientes com IA.</dd>
+              </div>
+              <div>
+                <dt>Vitrine e divulgação</dt>
+                <dd>Monta vitrines, publica anúncios e embeds e divulga vídeos novos automaticamente.</dd>
+              </div>
+              <div>
+                <dt>Métricas</dt>
+                <dd>Coleta métricas da loja para acompanhar seu desempenho.</dd>
+              </div>
+            </dl>
+          </article>
 
-          <a class="project" href="https://github.com/RyanNXZ9/Steam-Vetra" target="_blank" rel="noreferrer">
-            <span class="project-symbol" aria-hidden="true">V_</span>
-            <div>
-              <h3>Steam Vetra</h3>
-              <p>Ferramenta criada para facilitar o acesso à Steam.</p>
-            </div>
-            <span class="project-arrow" aria-hidden="true">↗</span>
-          </a>
+          <div class="project-list">
+            <a class="project" href="https://github.com/RyanNXZ9/AuraTool" target="_blank" rel="noreferrer">
+              <span class="project-symbol" aria-hidden="true">A_</span>
+              <div>
+                <h3>AuraTool</h3>
+                <p>Ferramenta para personalizar a aparência do perfil do Discord com Vencord.</p>
+              </div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </a>
 
+            <a class="project" href="https://github.com/RyanNXZ9/Steam-Vetra" target="_blank" rel="noreferrer">
+              <span class="project-symbol" aria-hidden="true">V_</span>
+              <div>
+                <h3>Steam Vetra</h3>
+                <p>Ferramenta criada para facilitar o acesso à Steam.</p>
+              </div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
