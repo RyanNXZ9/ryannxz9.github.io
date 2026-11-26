@@ -174,7 +174,6 @@
 
     .nova-project {
       margin-bottom: 24px;
-      padding: clamp(18px, 3vw, 32px);
       border: 1px solid #493955;
       border-radius: 12px;
       background: radial-gradient(ellipse at top left, #26202d, #191819 72%);
@@ -182,32 +181,77 @@
     }
 
     .nova-header {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      gap: clamp(14px, 2vw, 22px);
+      gap: clamp(10px, 1.5vw, 18px);
+      padding: clamp(12px, 2vw, 20px);
+      border-radius: inherit;
+      list-style: none;
+      cursor: pointer;
     }
 
+    .nova-header::-webkit-details-marker { display: none; }
+    .nova-header:focus-visible { outline: 2px solid #d9b0f4; outline-offset: 4px; }
     .nova-logo {
-      flex: none;
       display: block;
-      width: clamp(58px, 9vw, 92px);
+      width: clamp(44px, 5vw, 58px);
       height: auto;
-      border-radius: 8px;
+      border-radius: 6px;
     }
 
-    .nova-project h3 { font-size: clamp(2.6rem, 4.8vw, 4.25rem); }
-    .nova-header p { margin-top: 5px; color: var(--quiet); }
+    .nova-name { display: block; font: 400 clamp(2rem, 3.5vw, 3rem)/1 var(--display); }
+    .nova-summary { display: block; margin-top: 3px; color: var(--quiet); font-size: .95rem; }
+    .nova-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid #6b517b;
+      border-radius: 100px;
+      background: #2b2232;
+      color: #e3c9f5;
+      white-space: nowrap;
+      transition: background-color 160ms ease, border-color 160ms ease;
+    }
+
+    .nova-header:hover .nova-toggle, .nova-header:focus-visible .nova-toggle {
+      background: #3a2b43;
+      border-color: #ad88c6;
+    }
+
+    .nova-indicator { position: relative; width: 11px; height: 11px; }
+    .nova-indicator::before, .nova-indicator::after {
+      content: "";
+      position: absolute;
+      inset: 5px 0 auto;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .nova-indicator::after { transform: rotate(90deg); transition: transform 160ms ease; }
+    .nova-when-open, .nova-disclosure[open] .nova-when-closed { display: none; }
+    .nova-disclosure[open] .nova-when-open { display: inline; }
+    .nova-disclosure[open] .nova-indicator::after { transform: rotate(0deg); }
     .nova-features {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px 24px;
-      margin: 22px 0 0;
-      padding-top: 18px;
+      margin: 0 clamp(12px, 2vw, 20px);
+      padding-block: 16px 20px;
       border-top: 1px solid #3d3444;
     }
 
     .nova-features dt { color: #e3c9f5; font-weight: 600; }
     .nova-features dd { margin: 4px 0 0; color: var(--quiet); font-size: .95rem; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .nova-disclosure[open] .nova-features { animation: nova-reveal 180ms ease-out; }
+      @keyframes nova-reveal {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
 
     .about { border-top: 1px solid var(--edge); }
     .about-inner {
@@ -264,6 +308,8 @@
     }
 
     @media (max-width: 520px) {
+      .nova-toggle { gap: 6px; padding-inline: 8px; letter-spacing: 0; font-size: .6875rem; }
+      .nova-summary { font-size: .85rem; }
       .nova-features { grid-template-columns: 1fr; }
     }
 
@@ -319,31 +365,38 @@
 
         <div>
           <article class="nova-project" id="nova" aria-labelledby="nova-titulo">
-            <header class="nova-header">
-              <img class="nova-logo" src="assets/nova.png" width="321" height="364" alt="" loading="lazy">
-              <div>
-                <h3 id="nova-titulo">Nova</h3>
-                <p>Bot com IA que criei para administrar lojas no Discord.</p>
-              </div>
-            </header>
-            <dl class="nova-features">
-              <div>
-                <dt>Vendas e entrega</dt>
-                <dd>Gera chaves, oferece amostras e permite integrar entrega manual e gateways de pagamento.</dd>
-              </div>
-              <div>
-                <dt>Atendimento e moderação</dt>
-                <dd>Modera canais, verifica usuários e responde aos clientes com IA.</dd>
-              </div>
-              <div>
-                <dt>Vitrine e divulgação</dt>
-                <dd>Monta vitrines, publica anúncios e embeds e divulga vídeos novos automaticamente.</dd>
-              </div>
-              <div>
-                <dt>Métricas</dt>
-                <dd>Coleta métricas da loja para acompanhar seu desempenho.</dd>
-              </div>
-            </dl>
+            <details class="nova-disclosure">
+              <summary class="nova-header">
+                <img class="nova-logo" src="assets/nova.png?v=2" width="373" height="347" alt="" loading="lazy">
+                <span>
+                  <span class="nova-name" id="nova-titulo">Nova</span>
+                  <span class="nova-summary">Meu bot com IA para lojas no Discord.</span>
+                </span>
+                <span class="nova-toggle mono">
+                  <span class="nova-when-closed">Ver recursos</span>
+                  <span class="nova-when-open">Recolher</span>
+                  <span class="nova-indicator" aria-hidden="true"></span>
+                </span>
+              </summary>
+              <dl class="nova-features">
+                <div>
+                  <dt>Vendas e entrega</dt>
+                  <dd>Gera chaves, oferece amostras e permite integrar entrega manual e gateways de pagamento.</dd>
+                </div>
+                <div>
+                  <dt>Atendimento e moderação</dt>
+                  <dd>Modera canais, verifica usuários e responde aos clientes com IA.</dd>
+                </div>
+                <div>
+                  <dt>Vitrine e divulgação</dt>
+                  <dd>Monta vitrines, publica anúncios e embeds e divulga vídeos novos automaticamente.</dd>
+                </div>
+                <div>
+                  <dt>Métricas</dt>
+                  <dd>Coleta métricas da loja para acompanhar seu desempenho.</dd>
+                </div>
+              </dl>
+            </details>
           </article>
 
           <div class="project-list">
