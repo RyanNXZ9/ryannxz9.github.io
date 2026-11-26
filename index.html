@@ -162,8 +162,8 @@
       z-index: -1;
       border-radius: inherit;
       background: radial-gradient(
-        ellipse 238px 125px at var(--glow-x, 25%) var(--glow-y, 30%),
-        color-mix(in srgb, var(--card-glow, var(--accent)) 16%, transparent),
+        ellipse 178px 96px at var(--glow-x, 25%) var(--glow-y, 30%),
+        color-mix(in srgb, var(--card-glow, var(--accent)) 6%, transparent),
         transparent 75%
       );
       opacity: 0;
@@ -177,6 +177,16 @@
 
     .project:focus-visible::before,
     .nova-project:has(.nova-header:focus-visible)::before { opacity: 1; }
+
+    .card-pixel {
+      position: absolute;
+      z-index: 1;
+      width: 2px;
+      height: 2px;
+      background: var(--card-glow, var(--accent));
+      opacity: 0;
+      pointer-events: none;
+    }
 
     .project-symbol {
       display: grid;
@@ -204,7 +214,7 @@
     }
 
     .portfolio-projects .project:hover {
-      border-color: color-mix(in srgb, var(--project-border), var(--project-accent) 32%);
+      border-color: color-mix(in srgb, var(--project-border), var(--project-accent) 15%);
     }
     .portfolio-projects .project-symbol { border-color: var(--project-border); }
     .portfolio-projects .project-symbol,
@@ -263,8 +273,8 @@
     }
 
     .nova-header:hover .nova-toggle, .nova-header:focus-visible .nova-toggle {
-      background: #3a2b43;
-      border-color: #ad88c6;
+      background: #32263a;
+      border-color: #80658f;
     }
 
     .nova-indicator {
@@ -551,13 +561,43 @@
   </footer>
 
   <script>
-    const followsPointer = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const followsPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const pixelDrift = [-16, -8, 1, 9, 17];
     for (const card of document.querySelectorAll(".project, .nova-project")) {
       card.addEventListener("pointermove", (event) => {
-        if (!followsPointer.matches || event.pointerType !== "mouse") return;
+        if (reducedMotion.matches || !followsPointer.matches || event.pointerType !== "mouse") return;
         const bounds = card.getBoundingClientRect();
         card.style.setProperty("--glow-x", `${event.clientX - bounds.left}px`);
         card.style.setProperty("--glow-y", `${event.clientY - bounds.top}px`);
+      });
+
+      const trigger = card.querySelector(".nova-header") ?? card;
+      trigger.addEventListener("click", (event) => {
+        if (reducedMotion.matches || event.defaultPrevented) return;
+        const bounds = card.getBoundingClientRect();
+        const x = event.detail ? event.clientX - bounds.left : bounds.width / 2;
+        const y = event.detail ? event.clientY - bounds.top : trigger.offsetHeight / 2;
+
+        // Os pixels sobem um pouco, se espalham e apagam ao cair.
+        pixelDrift.forEach((drift, index) => {
+          const pixel = document.createElement("span");
+          pixel.className = "card-pixel";
+          pixel.setAttribute("aria-hidden", "true");
+          pixel.style.left = `${x}px`;
+          pixel.style.top = `${y}px`;
+          card.append(pixel);
+
+          const rise = 10 + (index % 3) * 4;
+          const animation = pixel.animate([
+            { opacity: 0, transform: "translate(0, 1px)" },
+            { opacity: 0.48, transform: `translate(${drift * 0.38}px, -${rise}px)`, offset: 0.32 },
+            { opacity: 0.30, transform: `translate(${drift * 0.7}px, -${rise - 2}px)`, offset: 0.53 },
+            { opacity: 0, transform: `translate(${drift}px, 7px)` }
+          ], { duration: 440 + index * 18, easing: "ease-out" });
+          const removePixel = () => pixel.remove();
+          animation.finished.then(removePixel, removePixel);
+        });
       });
     }
 
@@ -567,7 +607,6 @@
 
     if (context) {
       const control = pattern.querySelector(".wave-control");
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
       const glyphs = ".:/+=*#";
       const shades = ["#34352c", "#494b3e", "#686957", "#878570", "#aba58c", "#b9a579", "#d5bb82"];
       const frameInterval = 1000 / 24;
