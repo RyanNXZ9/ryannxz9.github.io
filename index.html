@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121311">
+  <meta name="description" content="Portfólio do Ryan. Segurança cibernética ofensiva, redes de computadores, projetos e loja no Discord.">
+  <title>Ryan · Portfólio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #121311;
+      --paper: #f3efe4;
+      --quiet: #b4b2a8;
+      --edge: #383a34;
+      --accent: #d6b77d;
+      --display: "Instrument Serif", Georgia, serif;
+      --body: "DM Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --gutter: clamp(22px, 5.5vw, 92px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ink); color: var(--paper); font: 1rem/1.55 var(--body); }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { font: 400 1em/.98 var(--display); }
+    .wrap { max-width: 1520px; padding-inline: var(--gutter); margin-inline: auto; }
+    .mono { font: 500 .75rem/1.35 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+
+    .skip {
+      position: absolute;
+      top: 8px;
+      left: var(--gutter);
+      z-index: 2;
+      transform: translateY(-160%);
+      padding: 10px 16px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .skip:focus { transform: translateY(0); }
+    .header { border-bottom: 1px solid var(--edge); }
+    .header-inner {
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .wordmark {
+      display: inline-flex;
+      align-items: center;
+      justify-self: start;
+      gap: 10px;
+      font: 400 2.1rem/1 var(--display);
+    }
+
+    .wordmark-symbol {
+      font: 500 .81rem/1 var(--mono);
+      color: var(--accent);
+      border: 1px solid var(--edge);
+      border-radius: 4px;
+      padding: 6px 5px;
+    }
+
+    .navigation { display: flex; align-items: center; gap: clamp(18px, 4vw, 56px); }
+    .navigation > a { padding-block: 12px; }
+    .navigation a:hover, .text-link:hover { color: var(--accent); }
+    .navigation .shop-link { color: var(--accent); }
+    .navigation .shop-link:hover { color: var(--paper); }
+    .header-action { justify-self: end; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 44px;
+      padding: 10px 18px;
+      border: 1px solid var(--edge);
+      border-radius: 100px;
+      transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+
+    .button:hover { border-color: var(--quiet); background: #22241e; }
+    .button.primary { border-color: var(--paper); background: var(--paper); color: var(--ink); }
+    .button.primary:hover { border-color: var(--accent); background: var(--accent); }
+
+    .hero { padding-block: clamp(50px, 5.2vw, 82px) clamp(36px, 3.4vw, 54px); }
+    .handle { color: var(--accent); margin-bottom: 20px; }
+    .hero h1 { font-size: clamp(4.15rem, 8vw, 7.5rem); letter-spacing: -.048em; }
+    .hero h1 em { color: var(--paper); }
+    .hero p { margin-top: 23px; max-width: 44ch; color: var(--quiet); font-size: clamp(1rem, 1.55vw, 1.2rem); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 27px; }
+
+    .pattern {
+      height: clamp(122px, 12vw, 190px);
+      position: relative;
+      overflow: hidden;
+      border-block: 1px solid var(--edge);
+      background-color: #181916;
+      background-image: radial-gradient(#4d4e42 1px, transparent 1px);
+      background-size: 15px 15px;
+    }
+
+    .pattern canvas { width: 100%; height: 100%; display: block; }
+    .wave-control {
+      position: absolute;
+      right: var(--gutter);
+      bottom: 12px;
+      min-height: 36px;
+      padding: 6px 12px;
+      border: 1px solid var(--edge);
+      border-radius: 100px;
+      background: #181916;
+      color: var(--quiet);
+      cursor: pointer;
+    }
+
+    .wave-control:hover, .wave-control:focus-visible { color: var(--paper); }
+    .wave-control:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .projects { padding-block: clamp(45px, 4vw, 58px) clamp(55px, 6vw, 86px); }
+    .section-layout { display: grid; grid-template-columns: minmax(200px, .7fr) minmax(0, 1.3fr); gap: 38px; }
+    .section-heading h2, .about h2, .contact h2 { font-size: clamp(3.05rem, 5vw, 5rem); letter-spacing: -.032em; }
+    .section-heading .mono { margin-top: 21px; }
+    .shop { padding-bottom: clamp(48px, 6vw, 80px); scroll-margin-top: 24px; }
+    .shop-panel {
+      padding: clamp(22px, 4vw, 56px);
+      border: 1px solid #524631;
+      border-radius: 14px;
+      background: radial-gradient(ellipse at top left, #2b251b, #1b1b16 66%);
+    }
+
+    .shop h2 { color: #f4e6c9; }
+    .shop .section-heading p { margin-top: 16px; max-width: 34ch; color: var(--quiet); }
+    .shop .button { margin-top: 22px; border-color: #786547; color: var(--accent); }
+    .shop .button:hover { background: #30291e; border-color: var(--accent); }
+    .shop .project-list, .shop .project, .shop .project-symbol { border-color: #4a4030; }
+    .shop .project:hover, .shop .project:focus-visible { background: #2a251b; }
+    .project-list { display: grid; }
+    .project {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 19px;
+      padding: 23px 5px;
+      border-top: 1px solid var(--edge);
+      transition: background-color 160ms ease;
+    }
+
+    .project-list { border-bottom: 1px solid var(--edge); }
+    .project:hover { background: #1a1c17; }
+    .project-symbol {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      aspect-ratio: 1;
+      border: 1px solid var(--edge);
+      border-radius: 8px;
+      color: var(--accent);
+      font: 400 1.25rem/1 var(--mono);
+    }
+
+    .project h3 { font-size: clamp(2rem, 3.2vw, 2.8rem); }
+    .project p { margin-top: 7px; color: var(--quiet); font-size: .95rem; }
+    .project-arrow { color: var(--accent); padding: 6px; }
+
+    .about { border-top: 1px solid var(--edge); }
+    .about-inner {
+      display: grid;
+      grid-template-columns: minmax(200px, .7fr) minmax(0, 1.3fr);
+      gap: 38px;
+      align-items: start;
+      padding-block: clamp(48px, 6vw, 85px);
+    }
+
+    .about-copy { display: grid; gap: 16px; }
+    .about p { max-width: 54ch; color: var(--quiet); font-size: clamp(1rem, 1.7vw, 1.25rem); }
+    .about strong { color: var(--paper); font-weight: 600; }
+    .contact { background: #1a1b17; border-block: 1px solid var(--edge); }
+    .contact-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      padding-block: clamp(36px, 5vw, 66px);
+    }
+
+    .contact .button { background: #24231b; color: var(--accent); border-color: #695a3e; }
+    .contact .button:hover { background: #30291d; border-color: var(--accent); }
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px 22px;
+      min-height: 76px;
+      padding-block: 15px;
+      color: var(--quiet);
+    }
+
+    .footer a { padding-block: 10px; }
+
+    @media (max-width: 720px) {
+      .header-inner { grid-template-columns: 1fr auto; gap: 0 15px; padding-top: 12px; }
+      .header-action { grid-column: 2; grid-row: 1; }
+      .navigation { grid-column: 1 / -1; flex-wrap: wrap; gap: 0 18px; margin-top: 3px; }
+      .hero-discord { display: none; }
+      .section-layout, .about-inner { grid-template-columns: 1fr; gap: 23px; }
+      .section-heading .mono { margin-top: 12px; }
+    }
+
+    @media (max-width: 380px) {
+      .hero h1 { font-size: 3.65rem; }
+      .hero-actions { gap: 8px; }
+      .hero-actions .button { padding-inline: 13px; }
+      .project { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 12px; }
+      .project-symbol { width: 39px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body id="inicio">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <header class="header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="#inicio"><span class="wordmark-symbol" aria-hidden="true">[R]</span> Ryan</a>
+      <nav class="navigation mono" aria-label="Navegação principal">
+        <a href="#projetos">Projetos</a>
+        <a class="shop-link" href="#loja">Loja</a>
+        <a href="#sobre">Sobre</a>
+        <a href="https://github.com/RyanNXZ9" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+      <a class="button mono header-action" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">
+        Discord <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="wrap hero" aria-labelledby="titulo">
+      <div class="handle mono">@RyanNXZ9</div>
+      <h1 id="titulo">Oi, eu sou<br><em>o Ryan.</em></h1>
+      <p>Crio ferramentas de software. Aqui estão os projetos que já publiquei, com links para o código de cada um.</p>
+      <div class="hero-actions">
+        <a class="button primary mono" href="#projetos">Ver projetos <span aria-hidden="true">↓</span></a>
+        <a class="button mono hero-discord" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">Discord <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <div class="pattern">
+      <canvas aria-hidden="true"></canvas>
+      <button class="wave-control mono" type="button" hidden>Pausar onda</button>
+    </div>
+
+    <section class="projects" id="projetos" aria-labelledby="projetos-titulo">
+      <div class="wrap section-layout">
+        <div class="section-heading">
+          <h2 id="projetos-titulo">Meus projetos</h2>
+          <p class="mono">
+            <a class="text-link" href="https://github.com/RyanNXZ9?tab=repositories" target="_blank" rel="noreferrer">
+              Ver mais no GitHub <span aria-hidden="true">↗</span>
+            </a>
+          </p>
+        </div>
+
+        <div class="project-list">
+          <a class="project" href="https://github.com/RyanNXZ9/AuraTool" target="_blank" rel="noreferrer">
+            <span class="project-symbol" aria-hidden="true">A_</span>
+            <div>
+              <h3>AuraTool</h3>
+              <p>Ferramenta para personalizar a aparência do perfil do Discord com Vencord.</p>
+            </div>
+            <span class="project-arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a class="project" href="https://github.com/RyanNXZ9/Steam-Vetra" target="_blank" rel="noreferrer">
+            <span class="project-symbol" aria-hidden="true">V_</span>
+            <div>
+              <h3>Steam Vetra</h3>
+              <p>Ferramenta criada para facilitar o acesso à Steam.</p>
+            </div>
+            <span class="project-arrow" aria-hidden="true">↗</span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap shop" id="loja" aria-labelledby="loja-titulo">
+      <div class="shop-panel section-layout">
+        <div class="section-heading">
+          <h2 id="loja-titulo">Loja no Discord</h2>
+          <p>Também tenho uma loja de game hacking. Os detalhes dos produtos ficam no meu servidor do Discord.</p>
+          <a class="button mono" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">
+            Explorar loja <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <div class="project-list">
+          <a class="project" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">
+            <span class="project-symbol" aria-hidden="true">S_</span>
+            <div>
+              <h3>Spoofer</h3>
+              <p>Detalhes no Discord</p>
+            </div>
+            <span class="project-arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <a class="project" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">
+            <span class="project-symbol" aria-hidden="true">E_</span>
+            <div>
+              <h3>External</h3>
+              <p>Detalhes no Discord</p>
+            </div>
+            <span class="project-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="sobre" aria-labelledby="sobre-titulo">
+      <div class="wrap about-inner">
+        <h2 id="sobre-titulo">Sobre mim</h2>
+        <div class="about-copy">
+          <p>Sou o Ryan, conhecido como RyanNXZ9 no GitHub. Tenho conhecimentos em <strong>segurança cibernética ofensiva</strong> e <strong>redes de computadores</strong>. Gosto de entender como os sistemas se comunicam e onde podem falhar.</p>
+          <p>Também desenvolvo minhas próprias ferramentas para plataformas que uso, como Discord e Steam.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" aria-labelledby="contato-titulo">
+      <div class="wrap contact-inner">
+        <h2 id="contato-titulo">Vamos conversar?</h2>
+        <a class="button mono" href="https://discord.gg/er49sMEQ48" target="_blank" rel="noreferrer">
+          Entrar no Discord <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer mono">
+    <span>© Ryan</span>
+    <a class="text-link" href="#inicio">Voltar ao topo <span aria-hidden="true">↑</span></a>
+  </footer>
+
+  <script>
+    const pattern = document.querySelector(".pattern");
+    const canvas = pattern.querySelector("canvas");
+    const context = canvas.getContext("2d", { alpha: false });
+
+    if (context) {
+      const control = pattern.querySelector(".wave-control");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const glyphs = ".:/+=*#";
+      const shades = ["#34352c", "#494b3e", "#686957", "#878570", "#aba58c", "#b9a579", "#d5bb82"];
+      const frameInterval = 1000 / 24;
+      let width = 0;
+      let height = 0;
+      let phase = 0;
+      let frameId = null;
+      let lastDraw = null;
+      let inView = false;
+      let paused = false;
+
+      // A crista avança pela faixa enquanto os caracteres continuam na mesma grade.
+      function drawPattern() {
+        context.fillStyle = "#151613";
+        context.fillRect(0, 0, width, height);
+
+        for (let column = 0; column * 9 < width; column++) {
+          const x = column * 9;
+          const u = x / width;
+          const ridge = 0.48 + 0.21 * Math.sin(u * 10 - 1.3 - phase) + 0.09 * Math.cos(u * 20 - phase * 2);
+          const contourOffset = Math.cos(u * 18);
+
+          for (let row = 0; row * 14 < height + 14; row++) {
+            const y = row * 14;
+            const distance = y / height - ridge;
+            const contour = Math.cos(distance * 22 + contourOffset);
+            const grain = Math.sin(column * 59.7 + row * 31.4) * 0.5 + 0.5;
+            const brightness = (0.5 + contour * 0.5) * Math.exp(-Math.abs(distance) * 2.1);
+            const index = Math.min(glyphs.length - 1, Math.floor((brightness * 0.8 + grain * 0.2) * glyphs.length));
+            context.fillStyle = shades[index];
+            context.fillText(glyphs[index], x, y + 11);
+          }
+        }
+      }
+
+      function resizePattern() {
+        ({ width, height } = canvas.getBoundingClientRect());
+        const scale = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * scale);
+        canvas.height = Math.round(height * scale);
+        context.setTransform(scale, 0, 0, scale, 0, 0);
+        context.font = "12px monospace";
+        drawPattern();
+      }
+
+      function animate(now) {
+        lastDraw ??= now;
+        const elapsed = now - lastDraw;
+        if (elapsed >= frameInterval) {
+          phase = (phase + Math.min(elapsed, 100) * 0.00065) % (2 * Math.PI);
+          lastDraw = now;
+          drawPattern();
+        }
+        frameId = requestAnimationFrame(animate);
+      }
+
+      function syncAnimation() {
+        control.hidden = reducedMotion.matches;
+        control.textContent = paused ? "Retomar onda" : "Pausar onda";
+
+        if (inView && !paused && !document.hidden && !reducedMotion.matches) {
+          if (frameId === null) frameId = requestAnimationFrame(animate);
+        } else if (frameId !== null) {
+          cancelAnimationFrame(frameId);
+          frameId = null;
+          lastDraw = null;
+        }
+      }
+
+      control.addEventListener("click", () => {
+        paused = !paused;
+        syncAnimation();
+      });
+      reducedMotion.addEventListener("change", syncAnimation);
+      document.addEventListener("visibilitychange", syncAnimation);
+      new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        syncAnimation();
+      }).observe(pattern);
+      new ResizeObserver(resizePattern).observe(canvas);
+      resizePattern();
+      syncAnimation();
+    }
+  </script>
+</body>
+</html>
+
