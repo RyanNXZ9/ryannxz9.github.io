@@ -143,7 +143,6 @@
     .shop .button { margin-top: 22px; border-color: #786547; color: var(--accent); }
     .shop .button:hover { background: #30291e; border-color: var(--accent); }
     .shop .project-list, .shop .project, .shop .project-symbol { border-color: #4a4030; }
-    .shop .project:hover, .shop .project:focus-visible { background: #2a251b; }
     .project-list { display: grid; }
     .project {
       display: grid;
@@ -152,11 +151,33 @@
       gap: 19px;
       padding: 23px 5px;
       border-top: 1px solid var(--edge);
-      transition: background-color 160ms ease;
     }
 
     .project-list { border-bottom: 1px solid var(--edge); }
-    .project:hover { background: #1a1c17; }
+    .project, .nova-project { position: relative; isolation: isolate; }
+    .project::before, .nova-project::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: radial-gradient(
+        ellipse 238px 125px at var(--glow-x, 25%) var(--glow-y, 30%),
+        color-mix(in srgb, var(--card-glow, var(--accent)) 16%, transparent),
+        transparent 75%
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+
+    @media (hover: hover) {
+      .project:hover::before, .nova-project:hover::before { opacity: 1; }
+    }
+
+    .project:focus-visible::before,
+    .nova-project:has(.nova-header:focus-visible)::before { opacity: 1; }
+
     .project-symbol {
       display: grid;
       place-items: center;
@@ -174,6 +195,7 @@
 
     .portfolio-projects { gap: 12px; border-bottom: 0; }
     .portfolio-projects .project {
+      --card-glow: var(--project-accent);
       padding: 18px clamp(12px, 2vw, 20px);
       border: 1px solid var(--project-border);
       border-radius: 12px;
@@ -181,7 +203,9 @@
       transition: border-color 160ms ease;
     }
 
-    .portfolio-projects .project:hover { border-color: var(--project-accent); }
+    .portfolio-projects .project:hover {
+      border-color: color-mix(in srgb, var(--project-border), var(--project-accent) 32%);
+    }
     .portfolio-projects .project-symbol { border-color: var(--project-border); }
     .portfolio-projects .project-symbol,
     .portfolio-projects .project-arrow { color: var(--project-accent); }
@@ -199,6 +223,7 @@
     }
 
     .nova-project {
+      --card-glow: #d8aaf6;
       margin-bottom: 12px;
       border: 1px solid #493955;
       border-radius: 12px;
@@ -212,19 +237,14 @@
       align-items: center;
       gap: clamp(10px, 1.5vw, 18px);
       padding: clamp(12px, 2vw, 20px);
-      border-radius: inherit;
+      border-radius: 11px;
       list-style: none;
       cursor: pointer;
     }
 
     .nova-header::-webkit-details-marker { display: none; }
     .nova-header:focus-visible { outline: 2px solid #d9b0f4; outline-offset: 4px; }
-    .nova-logo {
-      display: block;
-      width: clamp(44px, 5vw, 58px);
-      height: auto;
-      border-radius: 6px;
-    }
+    .nova-header .project-symbol { color: var(--card-glow); border-color: #5a4566; }
 
     .nova-name { display: block; font: 400 clamp(2rem, 3.5vw, 3rem)/1 var(--display); }
     .nova-summary { display: block; margin-top: 3px; color: var(--quiet); font-size: .95rem; }
@@ -416,7 +436,7 @@
           <article class="nova-project" id="nova" aria-labelledby="nova-titulo">
             <details class="nova-disclosure">
               <summary class="nova-header">
-                <img class="nova-logo" src="assets/nova.png?v=2" width="373" height="347" alt="" loading="lazy">
+                <span class="project-symbol" aria-hidden="true">N_</span>
                 <span>
                   <span class="nova-name" id="nova-titulo">Nova</span>
                   <span class="nova-summary">Meu bot com IA para lojas no Discord.</span>
@@ -531,6 +551,16 @@
   </footer>
 
   <script>
+    const followsPointer = window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+    for (const card of document.querySelectorAll(".project, .nova-project")) {
+      card.addEventListener("pointermove", (event) => {
+        if (!followsPointer.matches || event.pointerType !== "mouse") return;
+        const bounds = card.getBoundingClientRect();
+        card.style.setProperty("--glow-x", `${event.clientX - bounds.left}px`);
+        card.style.setProperty("--glow-y", `${event.clientY - bounds.top}px`);
+      });
+    }
+
     const pattern = document.querySelector(".pattern");
     const canvas = pattern.querySelector("canvas");
     const context = canvas.getContext("2d", { alpha: false });
