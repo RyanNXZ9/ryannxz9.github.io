@@ -172,8 +172,34 @@
     .project p { margin-top: 7px; color: var(--quiet); font-size: .95rem; }
     .project-arrow { color: var(--accent); padding: 6px; }
 
+    .portfolio-projects { gap: 12px; border-bottom: 0; }
+    .portfolio-projects .project {
+      padding: 18px clamp(12px, 2vw, 20px);
+      border: 1px solid var(--project-border);
+      border-radius: 12px;
+      background: var(--project-background);
+      transition: border-color 160ms ease;
+    }
+
+    .portfolio-projects .project:hover { border-color: var(--project-accent); }
+    .portfolio-projects .project-symbol { border-color: var(--project-border); }
+    .portfolio-projects .project-symbol,
+    .portfolio-projects .project-arrow { color: var(--project-accent); }
+
+    .auratool-project {
+      --project-accent: #abb2ff;
+      --project-border: #434b82;
+      --project-background: radial-gradient(ellipse at top left, #292d54, #181a26 78%);
+    }
+
+    .vetra-project {
+      --project-accent: #f5b7aa;
+      --project-border: #654354;
+      --project-background: linear-gradient(112deg, #3a2920, #382033 56%, #25243b);
+    }
+
     .nova-project {
-      margin-bottom: 24px;
+      margin-bottom: 12px;
       border: 1px solid #493955;
       border-radius: 12px;
       background: radial-gradient(ellipse at top left, #26202d, #191819 72%);
@@ -205,12 +231,13 @@
     .nova-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
+      gap: 6px;
+      padding: 4px 8px;
       border: 1px solid #6b517b;
       border-radius: 100px;
       background: #2b2232;
       color: #e3c9f5;
+      font: 500 .6875rem/1.35 var(--mono);
       white-space: nowrap;
       transition: background-color 160ms ease, border-color 160ms ease;
     }
@@ -220,19 +247,19 @@
       border-color: #ad88c6;
     }
 
-    .nova-indicator { position: relative; width: 11px; height: 11px; }
-    .nova-indicator::before, .nova-indicator::after {
-      content: "";
-      position: absolute;
-      inset: 5px 0 auto;
-      height: 1px;
-      background: currentColor;
+    .nova-indicator {
+      width: 5px;
+      height: 5px;
+      margin: -2px 1px 0;
+      border: solid currentColor;
+      border-width: 0 1px 1px 0;
+      transform: rotate(45deg);
+      transition: transform 220ms ease;
     }
 
-    .nova-indicator::after { transform: rotate(90deg); transition: transform 160ms ease; }
     .nova-when-open, .nova-disclosure[open] .nova-when-closed { display: none; }
     .nova-disclosure[open] .nova-when-open { display: inline; }
-    .nova-disclosure[open] .nova-indicator::after { transform: rotate(0deg); }
+    .nova-disclosure[open] .nova-indicator { transform: translateY(2px) rotate(225deg); }
     .nova-features {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -246,7 +273,30 @@
     .nova-features dd { margin: 4px 0 0; color: var(--quiet); font-size: .95rem; }
 
     @media (prefers-reduced-motion: no-preference) {
-      .nova-disclosure[open] .nova-features { animation: nova-reveal 180ms ease-out; }
+      @supports selector(::details-content) {
+        .nova-disclosure::details-content {
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 340ms cubic-bezier(.2, .75, .25, 1),
+                      content-visibility 340ms allow-discrete;
+        }
+
+        .nova-disclosure[open]::details-content { grid-template-rows: 1fr; }
+        .nova-body {
+          min-height: 0;
+          overflow: clip;
+          opacity: 0;
+          transform: translateY(-5px);
+          transition: opacity 220ms ease, transform 300ms ease-out;
+        }
+
+        .nova-disclosure[open] .nova-body { opacity: 1; transform: translateY(0); }
+      }
+
+      @supports not selector(::details-content) {
+        .nova-disclosure[open] .nova-features { animation: nova-reveal 240ms ease-out; }
+      }
+
       @keyframes nova-reveal {
         from { opacity: 0; transform: translateY(-4px); }
         to { opacity: 1; transform: translateY(0); }
@@ -308,7 +358,6 @@
     }
 
     @media (max-width: 520px) {
-      .nova-toggle { gap: 6px; padding-inline: 8px; letter-spacing: 0; font-size: .6875rem; }
       .nova-summary { font-size: .85rem; }
       .nova-features { grid-template-columns: 1fr; }
     }
@@ -372,35 +421,37 @@
                   <span class="nova-name" id="nova-titulo">Nova</span>
                   <span class="nova-summary">Meu bot com IA para lojas no Discord.</span>
                 </span>
-                <span class="nova-toggle mono">
+                <span class="nova-toggle">
                   <span class="nova-when-closed">Ver recursos</span>
                   <span class="nova-when-open">Recolher</span>
                   <span class="nova-indicator" aria-hidden="true"></span>
                 </span>
               </summary>
-              <dl class="nova-features">
-                <div>
-                  <dt>Vendas e entrega</dt>
-                  <dd>Gera chaves, oferece amostras e permite integrar entrega manual e gateways de pagamento.</dd>
-                </div>
-                <div>
-                  <dt>Atendimento e moderação</dt>
-                  <dd>Modera canais, verifica usuários e responde aos clientes com IA.</dd>
-                </div>
-                <div>
-                  <dt>Vitrine e divulgação</dt>
-                  <dd>Monta vitrines, publica anúncios e embeds e divulga vídeos novos automaticamente.</dd>
-                </div>
-                <div>
-                  <dt>Métricas</dt>
-                  <dd>Coleta métricas da loja para acompanhar seu desempenho.</dd>
-                </div>
-              </dl>
+              <div class="nova-body">
+                <dl class="nova-features">
+                  <div>
+                    <dt>Vendas e entrega</dt>
+                    <dd>Gera chaves, oferece amostras e permite integrar entrega manual e gateways de pagamento.</dd>
+                  </div>
+                  <div>
+                    <dt>Atendimento e moderação</dt>
+                    <dd>Modera canais, verifica usuários e responde aos clientes com IA.</dd>
+                  </div>
+                  <div>
+                    <dt>Vitrine e divulgação</dt>
+                    <dd>Monta vitrines, publica anúncios e embeds e divulga vídeos novos automaticamente.</dd>
+                  </div>
+                  <div>
+                    <dt>Métricas</dt>
+                    <dd>Coleta métricas da loja para acompanhar seu desempenho.</dd>
+                  </div>
+                </dl>
+              </div>
             </details>
           </article>
 
-          <div class="project-list">
-            <a class="project" href="https://github.com/RyanNXZ9/AuraTool" target="_blank" rel="noreferrer">
+          <div class="project-list portfolio-projects">
+            <a class="project auratool-project" href="https://github.com/RyanNXZ9/AuraTool" target="_blank" rel="noreferrer">
               <span class="project-symbol" aria-hidden="true">A_</span>
               <div>
                 <h3>AuraTool</h3>
@@ -409,7 +460,7 @@
               <span class="project-arrow" aria-hidden="true">↗</span>
             </a>
 
-            <a class="project" href="https://github.com/RyanNXZ9/Steam-Vetra" target="_blank" rel="noreferrer">
+            <a class="project vetra-project" href="https://github.com/RyanNXZ9/Steam-Vetra" target="_blank" rel="noreferrer">
               <span class="project-symbol" aria-hidden="true">V_</span>
               <div>
                 <h3>Steam Vetra</h3>
